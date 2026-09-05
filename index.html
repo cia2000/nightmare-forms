@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#133d78" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <title>FlyAway | Compra tu vuelo</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        color: #17233a;
+        background: #edf2f8;
+      }
+
+      * { box-sizing: border-box; }
+
+      body { margin: 0; }
+
+      .app {
+        max-width: 480px;
+        min-height: 100vh;
+        margin: auto;
+        background: #fff;
+      }
+
+      header {
+        padding: 24px 20px 18px;
+        color: #fff;
+        background: #133d78;
+      }
+
+      h1 { margin: 0; font-size: 1.45rem; }
+      header p { margin: 7px 0 0; font-size: .9rem; opacity: .9; }
+
+      .progress {
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 20px;
+        font-size: .75rem;
+        color: #56657b;
+        border-bottom: 1px solid #dce3ec;
+      }
+
+      .progress strong { color: #133d78; }
+
+      form { padding: 20px; }
+
+      section {
+        margin-bottom: 28px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid #e4e8ef;
+      }
+
+      section:last-of-type { border: 0; }
+      h2 { margin: 0 0 6px; font-size: 1.1rem; }
+      .section-text { margin: 0 0 18px; color: #637188; font-size: .85rem; line-height: 1.4; }
+
+      label {
+        display: block;
+        margin: 16px 0 6px;
+        font-size: .88rem;
+        font-weight: bold;
+      }
+
+      input, select, textarea {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 11px;
+        font: inherit;
+        color: inherit;
+        background: #fff;
+        border: 1px solid #bfc9d8;
+        border-radius: 4px;
+      }
+
+      textarea { min-height: 108px; resize: vertical; }
+      .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .two-columns label { margin-top: 16px; }
+
+      .option {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 12px;
+        font-size: .85rem;
+        font-weight: normal;
+        line-height: 1.35;
+      }
+
+      .option input { width: auto; min-height: auto; margin-top: 2px; }
+      .hidden { display: none; }
+      #seat-reference-confirmation { margin-bottom: 16px; }
+      .service-options { margin-top: 18px; }
+      .service-options strong { display: block; font-size: .88rem; }
+      .seat-label { margin: 16px 0 6px; font-size: .88rem; font-weight: bold; }
+
+      .seat-legend {
+        display: flex;
+        gap: 12px;
+        margin: 10px 0;
+        font-size: .75rem;
+      }
+
+      .seat-legend span::before {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 4px;
+        content: '';
+        border-radius: 2px;
+      }
+
+      .seat-legend .available::before { background: #2772be; }
+      .seat-legend .occupied::before { background: #c7ced8; }
+      .seat-map { padding: 12px; background: #eef3f8; border: 1px solid #d3dde8; border-radius: 4px; }
+      .seat-row { display: grid; grid-template-columns: 23px repeat(3, 1fr) 16px repeat(3, 1fr); gap: 4px; margin: 4px 0; }
+      .seat-number { align-self: center; font-size: .7rem; text-align: center; }
+
+      .seat {
+        min-height: 28px;
+        padding: 0;
+        color: #fff;
+        font: bold .67rem Arial, sans-serif;
+        letter-spacing: 0;
+        background: #2772be;
+        border-radius: 3px;
+      }
+
+      .seat:disabled { color: #7c8796; background: #c7ced8; }
+      .seat.selected { background: #e45027; }
+      .aisle { min-height: 1px; }
+      .seat-reference { margin: 12px 0 0; color: #176342; font-size: .85rem; font-weight: bold; }
+      .luggage-form { margin-top: 18px; padding: 14px; background: #f4f7fa; border: 1px solid #d7e0e9; border-radius: 4px; }
+      .luggage-form h3 { margin: 0; font-size: .95rem; }
+      .insurance-form { margin-top: 20px; padding: 14px; background: #fff5dc; border: 1px solid #e4c982; border-radius: 4px; }
+      .insurance-form h3 { margin: 0; font-size: 1rem; }
+      .insurance-form h4 { margin: 18px 0 0; font-size: .95rem; }
+      .disclaimers { margin-top: 20px; padding-top: 8px; border-top: 1px solid #d7e0e9; }
+      .disclaimers strong { display: block; margin-top: 12px; font-size: .88rem; }
+      .disclaimer-text { margin: 12px 0 0; font-size: .85rem; line-height: 1.35; }
+
+      .notice {
+        margin: 16px 0;
+        padding: 12px;
+        font-size: .82rem;
+        line-height: 1.4;
+        background: #fff5dc;
+        border-left: 4px solid #e4a329;
+      }
+
+      .error {
+        display: none;
+        margin: 0 0 18px;
+        padding: 12px;
+        color: #a11d2c;
+        font-size: .85rem;
+        background: #ffebee;
+        border: 1px solid #efb6bd;
+        border-radius: 4px;
+      }
+
+      .error.visible { display: block; }
+
+      button {
+        width: 100%;
+        min-height: 50px;
+        padding: 12px;
+        color: #fff;
+        font: bold 1rem Arial, sans-serif;
+        letter-spacing: .04em;
+        background: #e45027;
+        border: 0;
+        border-radius: 4px;
+      }
+
+      button:disabled { background: #9ca9ba; }
+      .legal { color: #6a7688; font-size: .73rem; line-height: 1.4; text-align: center; }
+
+      @media (min-width: 481px) {
+        body { padding: 24px 0; }
+        .app { min-height: auto; box-shadow: 0 3px 20px #aeb8c744; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>FlyAway</h1>
+        <p>Completa los datos para emitir tu billete.</p>
+      </header>
+
+      <div class="progress"><strong>1. Datos del pasajero</strong><span>2. Pago</span><span>3. Confirmación</span></div>
+
+      <form id="flight-form" novalidate>
+        <section>
+          <h2>Tu vuelo</h2>
+          <p id="flight-summary" class="section-text">Selecciona origen y destino</p>
+          <label for="origin">Aeropuerto de salida</label>
+          <select id="origin" name="origin">
+            <option value="">Selecciona el aeropuerto de salida</option>
+            <option>Adolfo Suarez Madrid-Barajas (MAD)</option>
+            <option>Barcelona-El Prat (BCN)</option>
+            <option>Palma de Mallorca (PMI)</option>
+            <option>Malaga-Costa del Sol (AGP)</option>
+            <option>Alicante-Elche Miguel Hernandez (ALC)</option>
+            <option>Gran Canaria (LPA)</option>
+            <option>Tenerife Sur (TFS)</option>
+            <option>Ibiza (IBZ)</option>
+            <option>Valencia (VLC)</option>
+            <option>Sevilla (SVQ)</option>
+            <option>Bilbao (BIO)</option>
+            <option>Santiago-Rosalia de Castro (SCQ)</option>
+            <option>Paris-Charles de Gaulle (CDG)</option>
+            <option>Paris-Orly (ORY)</option>
+            <option>London-Heathrow (LHR)</option>
+            <option>London-Gatwick (LGW)</option>
+            <option>Amsterdam-Schiphol (AMS)</option>
+            <option>Frankfurt (FRA)</option>
+            <option>Munich (MUC)</option>
+            <option>Rome-Fiumicino (FCO)</option>
+            <option>Milan-Malpensa (MXP)</option>
+            <option>Lisbon-Humberto Delgado (LIS)</option>
+            <option>Brussels (BRU)</option>
+            <option>Zurich (ZRH)</option>
+            <option>Vienna (VIE)</option>
+            <option>Dubai International (DXB)</option>
+            <option>Doha-Hamad (DOH)</option>
+            <option>Istanbul (IST)</option>
+            <option>New York-John F. Kennedy (JFK)</option>
+            <option>New York-Newark (EWR)</option>
+            <option>Miami International (MIA)</option>
+            <option>Los Angeles International (LAX)</option>
+            <option>San Francisco International (SFO)</option>
+            <option>Chicago-O'Hare (ORD)</option>
+            <option>Mexico City International (MEX)</option>
+            <option>Buenos Aires-Ezeiza (EZE)</option>
+            <option>Sao Paulo-Guarulhos (GRU)</option>
+            <option>Bogota-El Dorado (BOG)</option>
+            <option>Lima-Jorge Chavez (LIM)</option>
+            <option>Tokyo-Haneda (HND)</option>
+            <option>Singapore-Changi (SIN)</option>
+            <option>Sydney-Kingsford Smith (SYD)</option>
+            <option>Berlin Brandenburg (BER)</option>
+            <option>Dublin (DUB)</option>
+            <option>Edinburgh (EDI)</option>
+            <option>Manchester (MAN)</option>
+            <option>Birmingham (BHX)</option>
+            <option>Copenhagen (CPH)</option>
+            <option>Oslo-Gardermoen (OSL)</option>
+            <option>Stockholm-Arlanda (ARN)</option>
+            <option>Helsinki-Vantaa (HEL)</option>
+            <option>Warsaw-Chopin (WAW)</option>
+            <option>Prague-Vaclav Havel (PRG)</option>
+            <option>Budapest Ferenc Liszt (BUD)</option>
+            <option>Athens International (ATH)</option>
+            <option>Sofia (SOF)</option>
+            <option>Bucharest-Henri Coanda (OTP)</option>
+            <option>Belgrade Nikola Tesla (BEG)</option>
+            <option>Zagreb Franjo Tudman (ZAG)</option>
+            <option>Ljubljana Jozeta Pucnika (LJU)</option>
+            <option>Tirana International (TIA)</option>
+            <option>Thessaloniki-Macedonia (SKG)</option>
+            <option>Heraklion Nikos Kazantzakis (HER)</option>
+            <option>Rhodes Diagoras (RHO)</option>
+            <option>Naples International (NAP)</option>
+            <option>Venice Marco Polo (VCE)</option>
+            <option>Bologna Guglielmo Marconi (BLQ)</option>
+            <option>Pisa Galileo Galilei (PSA)</option>
+            <option>Florence Amerigo Vespucci (FLR)</option>
+            <option>Geneva (GVA)</option>
+            <option>EuroAirport Basel-Mulhouse (BSL)</option>
+            <option>Hamburg (HAM)</option>
+            <option>Dusseldorf (DUS)</option>
+            <option>Stuttgart (STR)</option>
+            <option>Nuremberg (NUE)</option>
+            <option>Krakow John Paul II (KRK)</option>
+            <option>Gdansk Lech Walesa (GDN)</option>
+            <option>Riga International (RIX)</option>
+            <option>Vilnius International (VNO)</option>
+            <option>Tallinn Lennart Meri (TLL)</option>
+            <option>Keflavik International (KEF)</option>
+            <option>Tromso Langnes (TOS)</option>
+            <option>Bergen Flesland (BGO)</option>
+            <option>Aalborg (AAL)</option>
+            <option>Gothenburg-Landvetter (GOT)</option>
+            <option>Wroclaw Copernicus (WRO)</option>
+            <option>Katowice (KTW)</option>
+            <option>Bratislava M. R. Stefanik (BTS)</option>
+            <option>Kosice International (KSC)</option>
+            <option>Cluj Avram Iancu (CLJ)</option>
+            <option>Porto Francisco Sa Carneiro (OPO)</option>
+            <option>Faro (FAO)</option>
+            <option>Madeira Cristiano Ronaldo (FNC)</option>
+            <option>Ponta Delgada Joao Paulo II (PDL)</option>
+            <option>Toronto Pearson (YYZ)</option>
+            <option>Montreal-Trudeau (YUL)</option>
+            <option>Vancouver International (YVR)</option>
+            <option>Boston Logan (BOS)</option>
+            <option>Washington Dulles (IAD)</option>
+            <option>Dallas-Fort Worth (DFW)</option>
+            <option>Atlanta Hartsfield-Jackson (ATL)</option>
+            <option>Denver International (DEN)</option>
+            <option>Seattle-Tacoma (SEA)</option>
+            <option>Las Vegas Harry Reid (LAS)</option>
+            <option>Orlando International (MCO)</option>
+            <option>Tampa International (TPA)</option>
+            <option>Phoenix Sky Harbor (PHX)</option>
+            <option>Houston George Bush (IAH)</option>
+            <option>Detroit Metropolitan (DTW)</option>
+            <option>Minneapolis-Saint Paul (MSP)</option>
+            <option>Philadelphia International (PHL)</option>
+            <option>Charlotte Douglas (CLT)</option>
+            <option>San Juan Luis Munoz Marin (SJU)</option>
+            <option>Cancun International (CUN)</option>
+            <option>Guadalajara Miguel Hidalgo (GDL)</option>
+            <option>Panama City Tocumen (PTY)</option>
+            <option>San Jose Juan Santamaria (SJO)</option>
+            <option>Havana Jose Marti (HAV)</option>
+            <option>Punta Cana International (PUJ)</option>
+            <option>Caracas Simon Bolivar (CCS)</option>
+            <option>Quito Mariscal Sucre (UIO)</option>
+            <option>Santiago Arturo Merino Benitez (SCL)</option>
+            <option>Montevideo Carrasco (MVD)</option>
+            <option>Rio de Janeiro-Galeao (GIG)</option>
+            <option>Recife-Guararapes (REC)</option>
+            <option>Fortaleza-Pinto Martins (FOR)</option>
+          </select>
+          <label for="destination">Aeropuerto de llegada</label>
+          <select id="destination" name="destination">
+            <option value="">Selecciona el aeropuerto de llegada</option>
+            <option>Adolfo Suarez Madrid-Barajas (MAD)</option>
+            <option>Barcelona-El Prat (BCN)</option>
+            <option>Palma de Mallorca (PMI)</option>
+            <option>Malaga-Costa del Sol (AGP)</option>
+            <option>Alicante-Elche Miguel Hernandez (ALC)</option>
+            <option>Gran Canaria (LPA)</option>
+            <option>Tenerife Sur (TFS)</option>
+            <option>Ibiza (IBZ)</option>
+            <option>Valencia (VLC)</option>
+            <option>Sevilla (SVQ)</option>
+            <option>Bilbao (BIO)</option>
+            <option>Santiago-Rosalia de Castro (SCQ)</option>
+            <option>Paris-Charles de Gaulle (CDG)</option>
+            <option>Paris-Orly (ORY)</option>
+            <option>London-Heathrow (LHR)</option>
+            <option>London-Gatwick (LGW)</option>
+            <option>Amsterdam-Schiphol (AMS)</option>
+            <option>Frankfurt (FRA)</option>
+            <option>Munich (MUC)</option>
+            <option>Rome-Fiumicino (FCO)</option>
+            <option>Milan-Malpensa (MXP)</option>
+            <option>Lisbon-Humberto Delgado (LIS)</option>
+            <option>Brussels (BRU)</option>
+            <option>Zurich (ZRH)</option>
+            <option>Vienna (VIE)</option>
+            <option>Dubai International (DXB)</option>
+            <option>Doha-Hamad (DOH)</option>
+            <option>Istanbul (IST)</option>
+            <option>New York-John F. Kennedy (JFK)</option>
+            <option>New York-Newark (EWR)</option>
+            <option>Miami International (MIA)</option>
+            <option>Los Angeles International (LAX)</option>
+            <option>San Francisco International (SFO)</option>
+            <option>Chicago-O'Hare (ORD)</option>
+            <option>Mexico City International (MEX)</option>
+            <option>Buenos Aires-Ezeiza (EZE)</option>
+            <option>Sao Paulo-Guarulhos (GRU)</option>
+            <option>Bogota-El Dorado (BOG)</option>
+            <option>Lima-Jorge Chavez (LIM)</option>
+            <option>Tokyo-Haneda (HND)</option>
+            <option>Singapore-Changi (SIN)</option>
+            <option>Sydney-Kingsford Smith (SYD)</option>
+            <option>Berlin Brandenburg (BER)</option>
+            <option>Dublin (DUB)</option>
+            <option>Edinburgh (EDI)</option>
+            <option>Manchester (MAN)</option>
+            <option>Birmingham (BHX)</option>
+            <option>Copenhagen (CPH)</option>
+            <option>Oslo-Gardermoen (OSL)</option>
+            <option>Stockholm-Arlanda (ARN)</option>
+            <option>Helsinki-Vantaa (HEL)</option>
+            <option>Warsaw-Chopin (WAW)</option>
+            <option>Prague-Vaclav Havel (PRG)</option>
+            <option>Budapest Ferenc Liszt (BUD)</option>
+            <option>Athens International (ATH)</option>
+            <option>Sofia (SOF)</option>
+            <option>Bucharest-Henri Coanda (OTP)</option>
+            <option>Belgrade Nikola Tesla (BEG)</option>
+            <option>Zagreb Franjo Tudman (ZAG)</option>
+            <option>Ljubljana Jozeta Pucnika (LJU)</option>
+            <option>Tirana International (TIA)</option>
+            <option>Thessaloniki-Macedonia (SKG)</option>
+            <option>Heraklion Nikos Kazantzakis (HER)</option>
+            <option>Rhodes Diagoras (RHO)</option>
+            <option>Naples International (NAP)</option>
+            <option>Venice Marco Polo (VCE)</option>
+            <option>Bologna Guglielmo Marconi (BLQ)</option>
+            <option>Pisa Galileo Galilei (PSA)</option>
+            <option>Florence Amerigo Vespucci (FLR)</option>
+            <option>Geneva (GVA)</option>
+            <option>EuroAirport Basel-Mulhouse (BSL)</option>
+            <option>Hamburg (HAM)</option>
+            <option>Dusseldorf (DUS)</option>
+            <option>Stuttgart (STR)</option>
+            <option>Nuremberg (NUE)</option>
+            <option>Krakow John Paul II (KRK)</option>
+            <option>Gdansk Lech Walesa (GDN)</option>
+            <option>Riga International (RIX)</option>
+            <option>Vilnius International (VNO)</option>
+            <option>Tallinn Lennart Meri (TLL)</option>
+            <option>Keflavik International (KEF)</option>
+            <option>Tromso Langnes (TOS)</option>
+            <option>Bergen Flesland (BGO)</option>
+            <option>Aalborg (AAL)</option>
+            <option>Gothenburg-Landvetter (GOT)</option>
+            <option>Wroclaw Copernicus (WRO)</option>
+            <option>Katowice (KTW)</option>
+            <option>Bratislava M. R. Stefanik (BTS)</option>
+            <option>Kosice International (KSC)</option>
+            <option>Cluj Avram Iancu (CLJ)</option>
+            <option>Porto Francisco Sa Carneiro (OPO)</option>
+            <option>Faro (FAO)</option>
+            <option>Madeira Cristiano Ronaldo (FNC)</option>
+            <option>Ponta Delgada Joao Paulo II (PDL)</option>
+            <option>Toronto Pearson (YYZ)</option>
+            <option>Montreal-Trudeau (YUL)</option>
+            <option>Vancouver International (YVR)</option>
+            <option>Boston Logan (BOS)</option>
+            <option>Washington Dulles (IAD)</option>
+            <option>Dallas-Fort Worth (DFW)</option>
+            <option>Atlanta Hartsfield-Jackson (ATL)</option>
+            <option>Denver International (DEN)</option>
+            <option>Seattle-Tacoma (SEA)</option>
+            <option>Las Vegas Harry Reid (LAS)</option>
+            <option>Orlando International (MCO)</option>
+            <option>Tampa International (TPA)</option>
+            <option>Phoenix Sky Harbor (PHX)</option>
+            <option>Houston George Bush (IAH)</option>
+            <option>Detroit Metropolitan (DTW)</option>
+            <option>Minneapolis-Saint Paul (MSP)</option>
+            <option>Philadelphia International (PHL)</option>
+            <option>Charlotte Douglas (CLT)</option>
+            <option>San Juan Luis Munoz Marin (SJU)</option>
+            <option>Cancun International (CUN)</option>
+            <option>Guadalajara Miguel Hidalgo (GDL)</option>
+            <option>Panama City Tocumen (PTY)</option>
+            <option>San Jose Juan Santamaria (SJO)</option>
+            <option>Havana Jose Marti (HAV)</option>
+            <option>Punta Cana International (PUJ)</option>
+            <option>Caracas Simon Bolivar (CCS)</option>
+            <option>Quito Mariscal Sucre (UIO)</option>
+            <option>Santiago Arturo Merino Benitez (SCL)</option>
+            <option>Montevideo Carrasco (MVD)</option>
+            <option>Rio de Janeiro-Galeao (GIG)</option>
+            <option>Recife-Guararapes (REC)</option>
+            <option>Fortaleza-Pinto Martins (FOR)</option>
+          </select>
+          <label for="departure">Fecha de salida</label>
+          <input id="departure" name="departure" type="date" />
+          <label for="return">Fecha de regreso</label>
+          <input id="return" name="return" type="date" />
+          <div id="date-error" class="error" role="alert"></div>
+          <div id="fare-field" class="hidden">
+            <label for="fare">Tarifa seleccionada</label>
+            <select id="fare" name="fare"><option value="">Selecciona una tarifa</option><option>Basic</option><option>Confort</option><option>Flex</option></select>
+          </div>
+          <div id="fare-extras" class="hidden">
+            <label for="diet">Tipo de dieta</label>
+            <select id="diet" name="diet">
+              <option value="">Selecciona una dieta</option>
+              <option>Ninguna</option>
+              <option>Vegetariana</option>
+              <option>Vegana</option>
+              <option>Sin gluten</option>
+              <option>Sin lactosa</option>
+              <option>Halal</option>
+              <option>Kosher</option>
+              <option>Diabetica</option>
+              <option>Baja en sodio</option>
+              <option>Infantil</option>
+            </select>
+            <div class="service-options">
+              <strong>Servicios de abordo</strong>
+              <label class="option"><input name="services" type="checkbox" value="wifi" />Wifi a bordo</label>
+              <label class="option"><input name="services" type="checkbox" value="video" />Video bajo demanda</label>
+              <label class="option"><input name="services" type="checkbox" value="audio" />Canal de audio premium</label>
+              <label class="option"><input name="services" type="checkbox" value="magazines" />Revistas impresas</label>
+              <label class="option"><input name="services" type="checkbox" value="newspaper" />Prensa internacional</label>
+              <label class="option"><input name="services" type="checkbox" value="priority" />Embarque prioritario</label>
+              <label class="option"><input name="services" type="checkbox" value="blanket" />Manta y almohada</label>
+              <label class="option"><input name="services" type="checkbox" value="power" />Toma de corriente</label>
+            </div>
+          </div>
+        </section>
+
+        <div id="booking-details" class="hidden">
+          <section>
+            <h2>Pasajero principal</h2>
+            <p class="section-text">Introduce los datos exactamente como figuran en tu documentación.</p>
+            <label for="name">Nombre completo</label>
+            <input id="name" name="name" type="text" autocomplete="name" />
+            <label for="document">DNI, NIE o pasaporte</label>
+            <input id="document" name="document" type="text" />
+            <div class="two-columns">
+              <div><label for="birthdate">Fecha de nacimiento</label><input id="birthdate" name="birthdate" type="date" /></div>
+              <div><label for="nationality">Nacionalidad</label><input id="nationality" name="nationality" type="text" /></div>
+            </div>
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" autocomplete="email" />
+            <label for="phone">Teléfono de contacto</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" />
+            <label for="address">Dirección completa</label>
+            <textarea id="address" name="address"></textarea>
+          </section>
+
+          <section>
+            <h2>Facturación y equipaje</h2>
+            <p class="seat-label">Selecciona tu asiento</p>
+            <p class="section-text">Solo se muestran las plazas que quedan disponibles en este vuelo.</p>
+            <div class="seat-legend"><span class="available">Disponible</span><span class="occupied">Ocupado</span></div>
+            <div id="seat-map" class="seat-map" aria-label="Plano de asientos del avión"></div>
+            <input id="seat" name="seat" type="hidden" />
+            <p id="seat-reference" class="seat-reference hidden" aria-live="polite"></p>
+            <div id="luggage-field" class="hidden">
+              <label for="luggage">Número de maletas facturadas</label>
+              <select id="luggage" name="luggage">
+                <option value="">Selecciona una opción</option>
+                <option value="0">Ninguna</option>
+                <option value="1">1 maleta</option>
+                <option value="2">2 maletas</option>
+                <option value="3">3 maletas</option>
+                <option value="4">4 maletas</option>
+                <option value="5">5 maletas</option>
+              </select>
+              <div id="luggage-error" class="error" role="alert"></div>
+            </div>
+            <div id="luggage-details" class="hidden">
+              <div id="luggage-forms"></div>
+              <div id="insurance-form" class="insurance-form hidden"></div>
+            </div>
+            <label for="meal">Necesidades alimentarias o médicas durante el vuelo</label>
+            <textarea id="meal" name="meal" placeholder="Describe cualquier necesidad especial."></textarea>
+            <label for="assistance">Información adicional para el personal de tierra</label>
+            <textarea id="assistance" name="assistance" placeholder="Incluye detalles que puedan ser necesarios."></textarea>
+          </section>
+        </div>
+
+        <section>
+          <h2>Pago</h2>
+          <label for="card-name">Titular de la tarjeta</label>
+          <input id="card-name" name="card-name" type="text" autocomplete="cc-name" />
+          <label for="card-number">Número de tarjeta</label>
+          <input id="card-number" name="card-number" inputmode="numeric" autocomplete="cc-number" />
+          <div class="two-columns">
+            <div><label for="expiry">Caducidad</label><input id="expiry" name="expiry" placeholder="MM/AA" autocomplete="cc-exp" /></div>
+            <div><label for="cvv">CVV</label><input id="cvv" name="cvv" inputmode="numeric" autocomplete="cc-csc" /></div>
+          </div>
+          <div class="notice">El pago se realizará inmediatamente. No podrás modificar el vuelo una vez emitido el billete.</div>
+          <label class="option"><input id="terms" name="terms" type="checkbox" />Acepto las condiciones de transporte, la política de privacidad, el tratamiento de mis datos y las condiciones de la tarifa.</label>
+          <label class="option"><input id="communications" name="communications" type="checkbox" />Quiero recibir comunicaciones comerciales de FlyAway y sus colaboradores.</label>
+        </section>
+
+        <div id="seat-reference-confirmation" class="hidden">
+          <label for="seat-reference-input">Código de confirmación del trayecto</label>
+          <input id="seat-reference-input" name="seat-reference-input" type="text" autocomplete="off" disabled />
+        </div>
+        <div id="form-error" class="error" role="alert"></div>
+        <button id="submit-button" type="submit">ENVIAR</button>
+        <p class="legal">Al pulsar enviar confirmas la compra por un importe total de 1.248,90 EUR.</p>
+      </form>
+    </main>
+
+    <script>
+      const form = document.querySelector('#flight-form');
+      const error = document.querySelector('#form-error');
+      const submitButton = document.querySelector('#submit-button');
+      const origin = document.querySelector('#origin');
+      const destination = document.querySelector('#destination');
+      const flightSummary = document.querySelector('#flight-summary');
+      const departure = document.querySelector('#departure');
+      const returnDate = document.querySelector('#return');
+      const dateError = document.querySelector('#date-error');
+      const fareField = document.querySelector('#fare-field');
+      const fare = document.querySelector('#fare');
+      const fareExtras = document.querySelector('#fare-extras');
+      const diet = document.querySelector('#diet');
+      const services = document.querySelectorAll('input[name="services"]');
+      const bookingDetails = document.querySelector('#booking-details');
+      const seatMap = document.querySelector('#seat-map');
+      const selectedSeat = document.querySelector('#seat');
+      const seatReference = document.querySelector('#seat-reference');
+      const seatReferenceConfirmation = document.querySelector('#seat-reference-confirmation');
+      const seatReferenceInput = document.querySelector('#seat-reference-input');
+      const luggageField = document.querySelector('#luggage-field');
+      const luggage = document.querySelector('#luggage');
+      const luggageError = document.querySelector('#luggage-error');
+      const luggageDetails = document.querySelector('#luggage-details');
+      const luggageForms = document.querySelector('#luggage-forms');
+      const insuranceForm = document.querySelector('#insurance-form');
+
+      const availableSeats = new Set(['2C', '4A', '6F', '9D', '12B', '15E', '18A', '21F', '24C']);
+      let selectedFare = '';
+      let seatReferenceCode = '';
+
+      function generateSeatReference() {
+        const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let reference = '';
+
+        for (let index = 0; index < 8; index += 1) {
+          reference += characters[Math.floor(Math.random() * characters.length)];
+        }
+
+        return reference;
+      }
+
+      function resetLuggageDetails() {
+        luggage.value = '';
+        luggageForms.replaceChildren();
+        resetInsuranceForm();
+        luggageDetails.classList.add('hidden');
+        luggageError.classList.remove('visible');
+      }
+
+      function resetInsuranceForm() {
+        insuranceForm.replaceChildren();
+        insuranceForm.classList.add('hidden');
+      }
+
+      function resetSeatReferenceConfirmation() {
+        seatReferenceInput.value = '';
+        seatReferenceInput.disabled = true;
+        seatReferenceConfirmation.classList.add('hidden');
+      }
+
+      function updateInsuranceVisibility() {
+        resetInsuranceForm();
+        const bagFields = [...luggageForms.querySelectorAll('input')];
+
+        if (!bagFields.length || bagFields.some((field) => !field.value.trim())) return;
+
+        const insuranceDetails = Array.from({ length: Number(luggage.value) }, (_, index) => {
+          const bagNumber = index + 1;
+          return `<h4>Maleta ${bagNumber}</h4>
+            <label for="insurance-condition-${bagNumber}">Estado general</label>
+            <select id="insurance-condition-${bagNumber}" name="insurance-condition-${bagNumber}"><option value="">Selecciona una opción</option><option>Nuevo</option><option>Buen estado</option><option>Con marcas de uso</option><option>Deteriorado</option></select>
+            <label for="insurance-age-${bagNumber}">Antigüedad aproximada</label>
+            <select id="insurance-age-${bagNumber}" name="insurance-age-${bagNumber}"><option value="">Selecciona una opción</option><option>Menos de un año</option><option>Entre uno y tres años</option><option>Más de tres años</option><option>No lo recuerdo</option></select>
+            <label for="insurance-fragile-${bagNumber}">¿Contiene objetos frágiles?</label>
+            <select id="insurance-fragile-${bagNumber}" name="insurance-fragile-${bagNumber}"><option value="">Selecciona una opción</option><option>Sí</option><option>No</option></select>
+            <label for="insurance-material-${bagNumber}">Material exterior principal</label>
+            <input id="insurance-material-${bagNumber}" name="insurance-material-${bagNumber}" type="text" />
+            <label for="insurance-bag-${bagNumber}-weight">Peso declarado</label>
+            <input id="insurance-bag-${bagNumber}-weight" name="insurance-bag-${bagNumber}-weight" type="text" inputmode="decimal" />`;
+        }).join('');
+
+        insuranceForm.innerHTML = `<h3>Seguro de equipaje</h3>
+          <p class="section-text">Completa este cuestionario para calcular una cobertura personalizada.</p>
+          ${insuranceDetails}
+          <label for="insurance-total">Peso total declarado</label>
+          <input id="insurance-total" name="insurance-total" type="text" inputmode="decimal" />
+          <div class="disclaimers">
+            <strong>Lee cuidadosamente las condiciones del seguro</strong>
+            <label class="option"><input data-required="true" name="insurance-disclaimer" type="checkbox" />Confirmo que el contenido declarado es correcto.</label>
+            <label class="option"><input data-required="true" name="insurance-disclaimer" type="checkbox" />Acepto que el seguro no cubre objetos prohibidos.</label>
+            <label class="option"><input data-required="true" name="insurance-disclaimer" type="checkbox" />Declaro que conozco los límites de indemnización.</label>
+            <p class="disclaimer-text">La cobertura puede excluir daños derivados del embalaje insuficiente.</p>
+            <p class="disclaimer-text">La valoración final se realizará tras revisar la documentación disponible.</p>
+            <p class="disclaimer-text">Una reclamación debe presentarse dentro del plazo indicado por la compañía.</p>
+            <p class="disclaimer-text">Los datos del seguro se usarán exclusivamente para tramitar la cobertura.</p>
+          </div>`;
+        insuranceForm.classList.remove('hidden');
+      }
+
+      function resetBookingDetails() {
+        bookingDetails.querySelectorAll('input, select, textarea').forEach((field) => {
+          if (field.type === 'checkbox') {
+            field.checked = false;
+          } else {
+            field.value = '';
+          }
+        });
+        seatMap.querySelectorAll('.seat.selected').forEach((seat) => seat.classList.remove('selected'));
+        seatReference.textContent = '';
+        seatReference.classList.add('hidden');
+        seatReferenceCode = '';
+        resetSeatReferenceConfirmation();
+        resetLuggageDetails();
+        luggageField.classList.add('hidden');
+        bookingDetails.classList.add('hidden');
+      }
+
+      function updateLuggageDetails() {
+        luggageForms.replaceChildren();
+        resetInsuranceForm();
+
+        if (luggage.value === '' || luggage.value === '0') {
+          luggageError.classList.remove('visible');
+          luggageDetails.classList.add('hidden');
+          return;
+        }
+
+        if (Number(luggage.value) >= 3 && !['15E', '24C'].includes(selectedSeat.value)) {
+          luggageError.textContent = 'El número de maletas excede el máximo asignado al asiento seleccionado. Seleccione otro asiento o indique una cantidad menor de maletas';
+          luggageError.classList.add('visible');
+          luggageDetails.classList.add('hidden');
+          return;
+        }
+
+        luggageError.classList.remove('visible');
+
+        for (let bagNumber = 1; bagNumber <= Number(luggage.value); bagNumber += 1) {
+          luggageForms.insertAdjacentHTML(
+            'beforeend',
+            `<div class="luggage-form">
+              <h3>Maleta ${bagNumber}</h3>
+              <label for="bag-${bagNumber}-weight">Peso de la maleta</label>
+              <input id="bag-${bagNumber}-weight" name="bag-${bagNumber}-weight" type="text" inputmode="decimal" />
+              <div class="two-columns">
+                <div><label for="bag-${bagNumber}-width">Ancho</label><input id="bag-${bagNumber}-width" name="bag-${bagNumber}-width" type="text" inputmode="decimal" /></div>
+                <div><label for="bag-${bagNumber}-height">Alto</label><input id="bag-${bagNumber}-height" name="bag-${bagNumber}-height" type="text" inputmode="decimal" /></div>
+              </div>
+              <div class="disclaimers">
+                <strong>Lee cuidadosamente antes de continuar</strong>
+                <label class="option"><input data-required="true" name="luggage-disclaimer" type="checkbox" />Confirmo que no llevo objetos peligrosos ni prohibidos.</label>
+                <label class="option"><input name="luggage-disclaimer" type="checkbox" />No acepto que la compañía puede inspeccionar mi equipaje.</label>
+                <label class="option"><input data-required="true" name="luggage-disclaimer" type="checkbox" />Declaro que los datos indicados para esta maleta son correctos.</label>
+                <p class="disclaimer-text">La compañía no responde por objetos de valor que se introduzcan en el equipaje facturado.</p>
+                <p class="disclaimer-text">El equipaje puede llegar en un vuelo distinto al del pasajero.</p>
+                <p class="disclaimer-text">Los controles de seguridad pueden requerir la apertura de una maleta.</p>
+                <p class="disclaimer-text">La información de equipaje se conservará durante el tiempo necesario para gestionar el vuelo.</p>
+              </div>
+            </div>`
+          );
+        }
+
+        luggageDetails.classList.remove('hidden');
+      }
+
+      for (let row = 1; row <= 24; row += 1) {
+        const rowElement = document.createElement('div');
+        rowElement.className = 'seat-row';
+        rowElement.innerHTML = `<span class="seat-number">${row}</span>`;
+
+        ['A', 'B', 'C', '', 'D', 'E', 'F'].forEach((letter) => {
+          if (!letter) {
+            rowElement.insertAdjacentHTML('beforeend', '<span class="aisle"></span>');
+            return;
+          }
+
+          const seatCode = `${row}${letter}`;
+          const isAvailable = availableSeats.has(seatCode);
+          rowElement.insertAdjacentHTML(
+            'beforeend',
+            `<button class="seat" type="button" data-seat="${seatCode}" ${isAvailable ? '' : 'disabled'}>${seatCode}</button>`
+          );
+        });
+
+        seatMap.append(rowElement);
+      }
+
+      seatMap.addEventListener('click', (event) => {
+        const seatButton = event.target.closest('.seat:not(:disabled)');
+
+        if (!seatButton) return;
+
+        seatMap.querySelectorAll('.seat.selected').forEach((seat) => seat.classList.remove('selected'));
+        seatButton.classList.add('selected');
+        selectedSeat.value = seatButton.dataset.seat;
+        seatReferenceCode = generateSeatReference();
+        seatReference.textContent = `Código de gestión: ${seatReferenceCode}`;
+        seatReference.classList.remove('hidden');
+        resetSeatReferenceConfirmation();
+        resetLuggageDetails();
+        luggageField.classList.remove('hidden');
+      });
+
+      luggage.addEventListener('change', updateLuggageDetails);
+      luggageForms.addEventListener('input', updateInsuranceVisibility);
+
+      function resetFareExtras() {
+        diet.value = '';
+        services.forEach((service) => { service.checked = false; });
+        fareExtras.classList.add('hidden');
+      }
+
+      function getDateError() {
+        if (!departure.value || !returnDate.value) return '';
+
+        const departureDay = new Date(`${departure.value}T12:00:00`).getDay();
+        const returnDay = new Date(`${returnDate.value}T12:00:00`).getDay();
+
+        if (![3, 6].includes(departureDay)) return 'No existen vuelos para la combinación de dias de la semana elegidos. Elija otra combinación de dias de la semana para la fecha de salida y de llegada.';
+
+        const allowedReturnDays = departureDay === 3 ? [6] : [3];
+        return allowedReturnDays.includes(returnDay) ? '' : 'No existen vuelos para la combinación de dias de la semana elegidos. Elija otra combinación de dias de la semana para la fecha de salida y de llegada.';
+      }
+
+      function updateFareVisibility() {
+        const dateValidationError = getDateError();
+        const datesAreComplete = departure.value && returnDate.value;
+
+        if (dateValidationError) {
+          dateError.textContent = dateValidationError;
+          dateError.classList.add('visible');
+        } else {
+          dateError.classList.remove('visible');
+        }
+
+        const journeyIsComplete = origin.value && destination.value && datesAreComplete && !dateValidationError;
+
+        if (!journeyIsComplete) {
+          fare.value = '';
+          fareField.classList.add('hidden');
+          resetFareExtras();
+          selectedFare = '';
+          resetBookingDetails();
+          return;
+        }
+
+        fareField.classList.remove('hidden');
+      }
+
+      function updateFlightSummary() {
+        if (!origin.value || !destination.value) {
+          flightSummary.textContent = 'Selecciona origen y destino';
+          return;
+        }
+
+        flightSummary.textContent = `${origin.value} a ${destination.value} · Ida y vuelta`;
+      }
+
+      origin.addEventListener('change', updateFlightSummary);
+      destination.addEventListener('change', updateFlightSummary);
+      [origin, destination, returnDate].forEach((field) => {
+        field.addEventListener('change', updateFareVisibility);
+      });
+      departure.addEventListener('change', () => {
+        returnDate.value = '';
+        updateFareVisibility();
+      });
+      fare.addEventListener('change', () => {
+        const isFareChange = selectedFare && selectedFare !== fare.value;
+        resetFareExtras();
+
+        if (!fare.value) {
+          resetBookingDetails();
+        } else if (isFareChange) {
+          resetBookingDetails();
+          bookingDetails.classList.remove('hidden');
+        } else {
+          bookingDetails.classList.remove('hidden');
+        }
+
+        if (fare.value) {
+          fareExtras.classList.remove('hidden');
+        }
+
+        selectedFare = fare.value;
+      });
+
+      form.addEventListener('input', () => error.classList.remove('visible'));
+      form.addEventListener('change', () => error.classList.remove('visible'));
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const emptyFields = [...form.querySelectorAll('input:not([type="checkbox"]), select, textarea')]
+          .filter((field) => !field.disabled && !field.value.trim());
+
+        const missingRequiredDisclaimer = [...form.querySelectorAll('input[data-required]')]
+          .some((disclaimer) => !disclaimer.checked);
+
+        if (emptyFields.length || !form.terms.checked || missingRequiredDisclaimer) {
+          error.textContent = 'Completa los campos requeridos.';
+          error.classList.add('visible');
+          return;
+        }
+
+        const allowedDiets = {
+          Basic: ['Sin gluten', 'Sin lactosa', 'Infantil'],
+          Confort: ['Halal', 'Baja en sodio', 'Kosher'],
+          Flex: ['Ninguna', 'Infantil']
+        };
+
+        if (!allowedDiets[fare.value].includes(diet.value)) {
+          error.textContent = 'La dieta elegida no está incluida en la tarifa seleccionada.';
+          error.classList.add('visible');
+          return;
+        }
+
+        const selectedServices = [...services].filter((service) => service.checked).map((service) => service.value);
+        const airTheatrum = ['wifi', 'video', 'audio'];
+        const sweetHome = ['priority', 'blanket', 'power'];
+        const airTheatrumCount = selectedServices.filter((service) => airTheatrum.includes(service)).length;
+        const sweetHomeCount = selectedServices.filter((service) => sweetHome.includes(service)).length;
+
+        if (fare.value === 'Basic' && airTheatrumCount < 2) {
+          error.textContent = 'Elige un mínimo de dos servicios de abordo del pack Air Theatrum';
+          error.classList.add('visible');
+          return;
+        }
+
+        if (fare.value === 'Confort' && (airTheatrumCount < 2 || sweetHomeCount < 1)) {
+          error.textContent = 'Combina dos servicios de abordo del pack Air Theatrum con uno del pack Sweet Home';
+          error.classList.add('visible');
+          return;
+        }
+
+        if (fare.value === 'Flex' && selectedServices.some((service) => service !== 'power')) {
+          error.textContent = 'Este servicio de abordo no está incluido en su tarifa. Elija otro/s servicios de abordo';
+          error.classList.add('visible');
+          return;
+        }
+
+        const bagWeightFields = [...form.querySelectorAll('input[name^="bag-"][name$="-weight"]')];
+        const invalidBagWeight = bagWeightFields.find((field) => {
+          const weight = Number(field.value);
+          return weight < 100 || weight > 100000;
+        });
+
+        if (invalidBagWeight) {
+          const bagNumber = invalidBagWeight.name.match(/^bag-(\d+)-weight$/)[1];
+          const weight = Number(invalidBagWeight.value);
+          error.textContent = weight < 100
+            ? `La maleta ${bagNumber} no supera el peso mínimo permitido`
+            : `La maleta ${bagNumber} supera el peso máximo permitido`;
+          error.classList.add('visible');
+          return;
+        }
+
+        const weightsDoNotMatch = bagWeightFields.some((field) => {
+          const bagNumber = field.name.match(/^bag-(\d+)-weight$/)[1];
+          const insuranceWeight = form.elements.namedItem(`insurance-bag-${bagNumber}-weight`);
+          return Number(field.value) !== Number(insuranceWeight.value);
+        });
+
+        if (weightsDoNotMatch) {
+          error.textContent = 'La relación de pesos de maletas no coincide con la relación de pesos de los seguros para las maletas. Corrija ese error y vuelva a enviar los datos';
+          error.classList.add('visible');
+          return;
+        }
+
+        const insuranceWeights = [...form.querySelectorAll('input[name^="insurance-bag-"][name$="-weight"]')];
+        const insuranceWeightTotal = insuranceWeights.reduce((total, field) => total + Number(field.value), 0);
+
+        if (insuranceWeights.length && Number(form.elements.namedItem('insurance-total').value) !== insuranceWeightTotal) {
+          error.textContent = 'El peso total de las maletas para el seguro no coincide con la suma de la relación de los pesos indicados para las maletas';
+          error.classList.add('visible');
+          return;
+        }
+
+        const inspectionRejected = [...form.querySelectorAll('.luggage-form')].some((luggageForm) => {
+          const declarations = luggageForm.querySelectorAll('input[name="luggage-disclaimer"]');
+          return declarations[1].checked;
+        });
+
+        if (inspectionRejected) {
+          error.textContent = 'Ha de aceptar la posibilidad de inspección de su equipaje para poder facturarlo';
+          error.classList.add('visible');
+          return;
+        }
+
+        if (seatReferenceConfirmation.classList.contains('hidden')) {
+          seatReferenceInput.disabled = false;
+          seatReferenceConfirmation.classList.remove('hidden');
+          return;
+        }
+
+        if (seatReferenceInput.value !== seatReferenceCode) {
+          error.textContent = 'referencia incorrecta';
+          error.classList.add('visible');
+          return;
+        }
+
+        error.classList.remove('visible');
+        submitButton.disabled = true;
+        submitButton.textContent = 'ENVIANDO...';
+
+        window.setTimeout(() => {
+          submitButton.disabled = false;
+          submitButton.textContent = 'ENVIAR';
+          error.textContent = 'Parece que su dispositivo perdio su conexión a Internet, intentelo mas tarde...';
+          error.classList.add('visible');
+        }, 15000);
+      });
+
+      const demoMode = new URLSearchParams(window.location.search).get('demo');
+
+      if (demoMode) {
+        const triggerChange = (field) => field.dispatchEvent(new Event('change', { bubbles: true }));
+        const demoField = (name) => form.elements.namedItem(name);
+
+        origin.selectedIndex = 1;
+        destination.value = 'New York-John F. Kennedy (JFK)';
+        triggerChange(origin);
+        triggerChange(destination);
+        departure.value = '2026-01-07';
+        triggerChange(departure);
+        returnDate.value = '2026-01-10';
+        triggerChange(returnDate);
+        fare.value = 'Basic';
+        triggerChange(fare);
+
+        if (demoMode !== 'partial') {
+          diet.value = 'Sin gluten';
+          document.querySelector('input[name="services"][value="wifi"]').checked = true;
+          document.querySelector('input[name="services"][value="video"]').checked = true;
+        }
+
+        demoField('name').value = 'Alicia Paredes';
+        demoField('document').value = '12345678Z';
+        demoField('birthdate').value = '1990-04-12';
+        demoField('nationality').value = 'Española';
+        demoField('email').value = 'alicia.paredes@example.com';
+        demoField('phone').value = '600123456';
+        demoField('address').value = 'Calle del Viento 14, 3B, 28001 Madrid';
+
+        if (demoMode !== 'partial') {
+          seatMap.querySelector('[data-seat="15E"]').click();
+          luggage.value = '1';
+          triggerChange(luggage);
+          demoField('bag-1-weight').value = '500';
+          demoField('bag-1-width').value = '40';
+          demoField('bag-1-height').value = '60';
+          luggageForms.dispatchEvent(new Event('input', { bubbles: true }));
+          form.querySelectorAll('input[name="luggage-disclaimer"][data-required]').forEach((field) => { field.checked = true; });
+
+          demoField('insurance-condition-1').value = 'Buen estado';
+          demoField('insurance-age-1').value = 'Entre uno y tres años';
+          demoField('insurance-fragile-1').value = 'No';
+          demoField('insurance-material-1').value = 'Policarbonato';
+          demoField('insurance-bag-1-weight').value = '500';
+          demoField('insurance-total').value = '500';
+          form.querySelectorAll('input[name="insurance-disclaimer"][data-required]').forEach((field) => { field.checked = true; });
+        }
+
+        demoField('meal').value = 'No se requieren atenciones adicionales.';
+        demoField('assistance').value = 'Sin observaciones para el personal de tierra.';
+        demoField('card-name').value = 'Alicia Paredes';
+        demoField('card-number').value = '4111111111111111';
+        demoField('expiry').value = '12/30';
+        demoField('cvv').value = '123';
+        demoField('terms').checked = true;
+      }
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js'));
+      }
+    </script>
+  </body>
+</html>
