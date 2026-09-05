@@ -179,14 +179,38 @@
 
       button:disabled { background: #9ca9ba; }
       .legal { color: #6a7688; font-size: .73rem; line-height: 1.4; text-align: center; }
+      .device-warning { display: none; }
 
       @media (min-width: 481px) {
         body { padding: 24px 0; }
         .app { min-height: auto; box-shadow: 0 3px 20px #aeb8c744; }
+
+        .device-warning {
+          position: fixed;
+          z-index: 10;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          color: #fff;
+          text-align: center;
+          background: #133d78;
+        }
+
+        .device-warning div { max-width: 360px; }
+        .device-warning h2 { margin: 0 0 12px; font-size: 1.4rem; }
+        .device-warning p { margin: 0; line-height: 1.5; }
       }
     </style>
   </head>
   <body>
+    <div class="device-warning" role="alert">
+      <div>
+        <h2>Esta experiencia es solo para móvil</h2>
+        <p>Abre la aplicación desde un teléfono para continuar.</p>
+      </div>
+    </div>
     <main class="app">
       <header>
         <h1>FlyAway</h1>
