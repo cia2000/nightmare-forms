@@ -4,6 +4,7 @@
   "id": "./",
   "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#edf2f8",
   "theme_color": "#133d78",
   "lang": "es",

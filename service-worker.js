@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flyaway-formnightmare-v1';
+const CACHE_NAME = 'flyaway-formnightmare-v2';
 const APP_SHELL = [
   './',
   './index.html',

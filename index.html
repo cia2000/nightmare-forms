@@ -179,7 +179,26 @@
 
       button:disabled { background: #9ca9ba; }
       .legal { color: #6a7688; font-size: .73rem; line-height: 1.4; text-align: center; }
-      .device-warning { display: none; }
+      .device-warning, .orientation-warning { display: none; }
+
+      @media (max-width: 480px) and (orientation: landscape) {
+        .orientation-warning {
+          position: fixed;
+          z-index: 10;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          color: #fff;
+          text-align: center;
+          background: #133d78;
+        }
+
+        .orientation-warning div { max-width: 360px; }
+        .orientation-warning h2 { margin: 0 0 12px; font-size: 1.4rem; }
+        .orientation-warning p { margin: 0; line-height: 1.5; }
+      }
 
       @media (min-width: 481px) {
         body { padding: 24px 0; }
@@ -209,6 +228,12 @@
       <div>
         <h2>Esta experiencia es solo para móvil</h2>
         <p>Abre la aplicación desde un teléfono para continuar.</p>
+      </div>
+    </div>
+    <div class="orientation-warning" role="alert">
+      <div>
+        <h2>Gira tu dispositivo</h2>
+        <p>Esta experiencia solo está disponible en orientación vertical.</p>
       </div>
     </div>
     <main class="app">
